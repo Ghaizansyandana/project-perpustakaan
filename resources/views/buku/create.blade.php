@@ -8,14 +8,13 @@
         @csrf
 
         <div class="mb-3">
-            <label>Judul</label>
-            <input type="text" name="judul" class="form-control" required>
+            <label for="judul" class="form-label">Judul</label>
+            <input type="text" id="judul" name="judul" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label>Kategori</label>
-            <select name="kategori_id" class="form-control" required>
-                <option value="">-- Pilih --</option>
+            <label for="kategori_id" class="form-label">Kategori</label>
+            <select id="kategori_id" name="kategori_id" class="form-select" required>
                 @foreach($kategori as $k)
                     <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
                 @endforeach
@@ -23,26 +22,25 @@
         </div>
 
         <div class="mb-3">
-            <label>Pengarang</label>
-            <select name="pengarang_id[]" multiple class="form-control" required>
+            <label for="pengarang_id" class="form-label">Pengarang</label>
+            <select id="pengarang_id" name="pengarang_id" class="form-select" required>
                 @foreach($pengarang as $p)
                     <option value="{{ $p->id }}">{{ $p->nama_pengarang }}</option>
                 @endforeach
             </select>
-            <small>* tekan Ctrl untuk memilih >1</small>
         </div>
 
         <div class="mb-3">
-            <label>Stok</label>
-            <input type="number" name="stok" class="form-control" required>
+            <label for="stok" class="form-label">Stok</label>
+            <input type="number" id="stok" name="stok" class="form-control" required min="0">
         </div>
 
         <div class="mb-3">
-            <label>Tahun</label>
-            <input type="number" name="tahun" class="form-control" required>
+            <label for="tahun" class="form-label">Tahun</label>
+            <input type="number" id="tahun" name="tahun" class="form-control" required min="0">
         </div>
 
-        <button class="btn btn-primary">Simpan</button>
+        <button class="btn btn-primary" type="submit">Simpan</button>
         <a href="{{ route('buku.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>

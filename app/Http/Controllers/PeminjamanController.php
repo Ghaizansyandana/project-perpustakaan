@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\PeminjamanDetail;
@@ -34,41 +35,61 @@ class PeminjamanController extends Controller
     {
         $request->validate([
             'nama_peminjam' => 'required',
-            'tanggal_pinjam' => 'required|date',
-            'tanggal_kembali' => 'required|date',
             'buku_id' => 'required|array',
             'jumlah' => 'required|array'
         ]);
 
-        DB::transaction(function () use ($request) {
+        // Set dates
+        $tanggalPinjam = now();
+        $tanggalKembali = now()->addDays(7);
+
+        try {
+            DB::beginTransaction();
 
             $kode = "TRX-" . now()->format('YmdHis');
 
+            // Create the loan record
             $transaksi = Peminjaman::create([
                 'kode_pinjam' => $kode,
                 'nama_peminjam' => $request->nama_peminjam,
-                'tanggal_pinjam' => $request->tanggal_pinjam,
-                'tanggal_kembali' => $request->tanggal_kembali,
+                'tanggal_pinjam' => $tanggalPinjam,
+                'tanggal_kembali' => $tanggalKembali,
+                'status' => 'Pinjam'
             ]);
 
+            // Process each book in the request
             foreach ($request->buku_id as $i => $buku_id) {
                 $jumlah_pinjam = $request->jumlah[$i];
 
-                // Kurangi stok buku
-                $buku = Buku::find($buku_id);
+                // Validate book stock
+                $buku = Buku::findOrFail($buku_id);
+                
+                if ($buku->stok < $jumlah_pinjam) {
+                    throw new \Exception("Stok buku {$buku->judul} tidak mencukupi. Stok tersedia: {$buku->stok}");
+                }
+
+                // Update book stock
                 $buku->stok -= $jumlah_pinjam;
                 $buku->save();
 
-                // Simpan detail
+                // Save loan details
                 PeminjamanDetail::create([
                     'peminjaman_id' => $transaksi->id,
                     'buku_id' => $buku_id,
-                    'jumlah' => $jumlah_pinjam
+                    'jumlah' => $jumlah_pinjam,
+                    'denda' => 0 // Initialize fine as 0
                 ]);
             }
-        });
 
-        return redirect()->route('peminjaman.index')->with('success', 'Transaksi berhasil');
+            DB::commit();
+
+            return redirect()->route('peminjaman.index')
+                ->with('success', 'Transaksi peminjaman berhasil disimpan');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     public function show($id)
@@ -97,6 +118,63 @@ class PeminjamanController extends Controller
 
         return redirect()->route('peminjaman.index')->with('success', 'Buku berhasil dikembalikan & stok diperbarui.');
     }
+
+    public function exportPdf()
+    {
+        $data = Peminjaman::with('detail.buku')->get();
+        $pdf = PDF::loadView('peminjaman.laporan_pdf', compact('data'));
+        return $pdf->download('laporan_peminjaman.pdf');
+    }
+
+ public function keranjang()
+    {
+        $bukuIds = session('keranjang_pinjam', []);
+        $buku = Buku::whereIn('id', $bukuIds)->get();
+        $siswa = Siswa::all();
+
+        return view('peminjaman.keranjang', compact('buku', 'siswa'));
+    }
+
+    public function checkout(Request $request)
+    {
+        $request->validate(['siswa_id' => 'required']);
+        $bukuIds = session('keranjang_pinjam', []);
+
+        DB::transaction(function () use ($request, $bukuIds) {
+            $kode = 'TRX' . date('YmdHis');
+
+            $trans = Peminjaman::create([
+                'kode_pinjam' => $kode,
+                'siswa_id' => $request->siswa_id,
+                'tanggal_pinjam' => today(),
+                'status' => 'dipinjam'
+            ]);
+
+            foreach ($bukuIds as $id) {
+                PeminjamanDetail::create([
+                    'peminjaman_id' => $trans->id,
+                    'buku_id' => $id,
+                    'jumlah' => 1
+                ]);
+
+                Buku::where('id', $id)->decrement('stok');
+            }
+        });
+
+        session()->forget('keranjang_pinjam');
+
+        return redirect()->route('peminjaman.index')->with('success', 'Transaksi berhasil!');
+    }
+
+    public function remove($id)
+    {
+        $keranjang = session('keranjang_pinjam', []);
+        $keranjang = array_filter($keranjang, fn($b) => $b != $id);
+        session(['keranjang_pinjam' => $keranjang]);
+
+        return back()->with('success', 'Buku dihapus dari keranjang');
+    }
+
 
 }
 

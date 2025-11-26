@@ -2,8 +2,21 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
-    <h3>Daftar Pengarang</h3>
-    <a href="<?php echo e(route('pengarang.create')); ?>" class="btn btn-primary mb-3">➕ Tambah Pengarang</a>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3>Daftar Pengarang</h3>
+        </div>
+        <div class="col-md-6">
+            <form action="<?php echo e(route('pengarang.index')); ?>" method="GET" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" 
+                       placeholder="Cari nama pengarang..." value="<?php echo e(request('search')); ?>">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </form>
+        </div>
+    </div>
+    <div class="mb-3">
+        <a href="<?php echo e(route('pengarang.create')); ?>" class="btn btn-primary">➕ Tambah Pengarang</a>
+    </div>
 
     <?php if(session('success')): ?>
         <div class="alert alert-success"><?php echo e(session('success')); ?></div>

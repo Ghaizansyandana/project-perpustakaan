@@ -30,6 +30,7 @@
             <th>Tanggal Pinjam</th>
             <th>Tanggal Kembali</th>
             <th>Status</th>
+            <th>Denda</th>
             <th>Aksi</th>
 
         </tr>
@@ -40,17 +41,13 @@
             <td>{{ $row->nama_peminjam }}</td>
             <td>{{ $row->tanggal_pinjam }}</td>
             <td>{{ $row->tanggal_kembali }}</td>
-            <td>
-                <a href="{{ route('peminjaman.show', $row->id) }}" class="btn btn-sm btn-info">Detail</a>
-            </td>
-            <td>
             @if ($row->status == 'Pinjam')
                 <span class="badge bg-danger">Belum Kembali</span>
             @else
                 <span class="badge bg-success">Dikembalikan</span>
             @endif
         </td>
-
+        <td>Rp {{ number_format($row->total_denda) }}</td>
         <td>
             <a href="{{ route('peminjaman.show', $row->id) }}" class="btn btn-sm btn-info">Detail</a>
 
@@ -59,7 +56,11 @@
                 onclick="return confirm('Konfirmasi pengembalian buku?')">Kembalikan</a>
             @endif
         </td>
-
+        <td>
+            <a href="{{ route('peminjaman.exportPdf') }}" class="btn btn-danger mb-3" target="_blank">
+                Export PDF
+            </a>
+        </td>
         </tr>
         @endforeach
     </table>

@@ -6,7 +6,7 @@
         {{-- Add your logo image here if needed --}}
         {{-- <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" /> --}}
       </span>
-      <span class="app-brand-text demo menu-text fw-bolder ms-2">{{ config('app.name', 'Laravel') }}</span>
+      <h4>PAUL PATTON</h4>
     </a>
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
       <i class="bx bx-chevron-left bx-sm align-middle"></i>
@@ -22,18 +22,18 @@
       </a>
     </li>
 
-    {{-- Templates (since your error is on /templates) --}}
-    <li class="menu-item {{ request()->is('templates*') ? 'active' : '' }}">
-      <a href="{{ url('/templates') }}" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
-        <div data-i18n="Templates">Templates</div>
+    {{-- Pengarang --}}
+    <li class="menu-item {{ request()->is('pengarang*') ? 'active' : '' }}">
+      <a href="{{ route('pengarang.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user-voice"></i>
+        <div data-i18n="Pengarang">Pengarang</div>
       </a>
     </li>
 
     {{-- Kategori --}}
     <li class="menu-item {{ request()->is('kategori*') ? 'active' : '' }}">
       <a href="{{ route('kategori.index') }}" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
+        <i class="menu-icon tf-icons bx bx-category"></i>
         <div data-i18n="Kategori">Kategori</div>
       </a>
     </li>
@@ -41,8 +41,16 @@
     {{-- Buku --}}
     <li class="menu-item {{ request()->is('buku*') ? 'active' : '' }}">
       <a href="{{ route('buku.index') }}" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
-        <div data-i18n="Kategori">Buku</div>
+        <i class="menu-icon tf-icons bx bx-book"></i>
+        <div data-i18n="Buku">Buku</div>
+      </a>
+    </li>
+
+    {{-- Peminjaman --}}
+    <li class="menu-item {{ request()->is('peminjaman*') ? 'active' : '' }}">
+      <a href="{{ route('peminjaman.index') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-book-bookmark"></i>
+        <div data-i18n="Peminjaman">Peminjaman</div>
       </a>
     </li>
 

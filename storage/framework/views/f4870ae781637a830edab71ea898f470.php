@@ -2,8 +2,21 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container">
-    <h3>Daftar Kategori Buku</h3>
-    <a href="<?php echo e(route('kategori.create')); ?>" class="btn btn-primary mb-3">➕ Tambah Kategori</a>
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3>Daftar Kategori Buku</h3>
+        </div>
+        <div class="col-md-6">
+            <form action="<?php echo e(route('kategori.index')); ?>" method="GET" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" 
+                       placeholder="Cari kategori..." value="<?php echo e(request('search')); ?>">
+                <button type="submit" class="btn btn-primary">Cari</button>
+            </form>
+        </div>
+    </div>
+    <div class="mb-3">
+        <a href="<?php echo e(route('kategori.create')); ?>" class="btn btn-primary">➕ Tambah Kategori</a>
+    </div>
 
     <?php if(session('success')): ?>
         <div class="alert alert-success"><?php echo e(session('success')); ?></div>
@@ -30,7 +43,7 @@
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </table>
 
-    <?php echo e($data->links()); ?>
+    <?php echo e($data->appends(['search' => request('search')])->links()); ?>
 
 </div>
 <?php $__env->stopSection(); ?>

@@ -6,7 +6,7 @@
         
         
       </span>
-      <span class="app-brand-text demo menu-text fw-bolder ms-2"><?php echo e(config('app.name', 'Laravel')); ?></span>
+      <h4>PAUL PATTON</h4>
     </a>
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
       <i class="bx bx-chevron-left bx-sm align-middle"></i>
@@ -23,17 +23,17 @@
     </li>
 
     
-    <li class="menu-item <?php echo e(request()->is('templates*') ? 'active' : ''); ?>">
-      <a href="<?php echo e(url('/templates')); ?>" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
-        <div data-i18n="Templates">Templates</div>
+    <li class="menu-item <?php echo e(request()->is('pengarang*') ? 'active' : ''); ?>">
+      <a href="<?php echo e(route('pengarang.index')); ?>" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user-voice"></i>
+        <div data-i18n="Pengarang">Pengarang</div>
       </a>
     </li>
 
     
     <li class="menu-item <?php echo e(request()->is('kategori*') ? 'active' : ''); ?>">
       <a href="<?php echo e(route('kategori.index')); ?>" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
+        <i class="menu-icon tf-icons bx bx-category"></i>
         <div data-i18n="Kategori">Kategori</div>
       </a>
     </li>
@@ -41,8 +41,16 @@
     
     <li class="menu-item <?php echo e(request()->is('buku*') ? 'active' : ''); ?>">
       <a href="<?php echo e(route('buku.index')); ?>" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
-        <div data-i18n="Kategori">Buku</div>
+        <i class="menu-icon tf-icons bx bx-book"></i>
+        <div data-i18n="Buku">Buku</div>
+      </a>
+    </li>
+
+    
+    <li class="menu-item <?php echo e(request()->is('peminjaman*') ? 'active' : ''); ?>">
+      <a href="<?php echo e(route('peminjaman.index')); ?>" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-book-bookmark"></i>
+        <div data-i18n="Peminjaman">Peminjaman</div>
       </a>
     </li>
 

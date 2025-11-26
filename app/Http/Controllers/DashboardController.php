@@ -14,11 +14,12 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $stok_minimal = 3;
         $jumlah_buku = Buku::count();
         $jumlah_pengarang = Pengarang::count();
         $jumlah_kategori = KategoriBuku::count();
         $jumlah_peminjaman = Peminjaman::count();
-
+        $buku_stok_menipis = Buku::where('stok', '<=', $stok_minimal)->count();
         // Grafik peminjaman per bulan
         $peminjaman_per_bulan = Peminjaman::select(DB::raw("DATE_FORMAT(tanggal_pinjam, '%M') AS bulan"), DB::raw("COUNT(*) AS total"))
             ->groupBy('bulan')
@@ -38,7 +39,8 @@ class DashboardController extends Controller
             'jumlah_kategori',
             'jumlah_peminjaman',
             'peminjaman_per_bulan',
-            'buku_terbanyak'
+            'buku_terbanyak',
+            'buku_stok_menipis'
         ));
     }
 }

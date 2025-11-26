@@ -1,6 +1,7 @@
 
 
 <?php $__env->startSection('content'); ?>
+<script src="https://unpkg.com/html5-qrcode"></script>
 <div class="container">
     <div class="row mb-4">
         <div class="col-md-6">
@@ -44,6 +45,7 @@
             </td>
             <td><?php echo e($row->stok); ?></td>
             <td><?php echo e($row->tahun); ?></td>
+            <td><?php echo QrCode::size(150)->generate($buku->kode_qr); ?></td>
             <td>
                 <a href="<?php echo e(route('buku.edit', $row->id)); ?>" class="btn btn-sm btn-warning">Edit</a>
                 <form action="<?php echo e(route('buku.destroy', $row->id)); ?>" class="d-inline" method="POST" onsubmit="return confirm('Yakin hapus?')">

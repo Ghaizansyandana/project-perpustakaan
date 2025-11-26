@@ -14,15 +14,10 @@ return new class extends Migration
         Schema::create('buku', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
+            $table->foreignId('kategori_id')->constrained('kategori');
             $table->integer('stok');
             $table->integer('tahun');
-            $table->unsignedBigInteger('kategori_id');
             $table->timestamps();
-
-            $table->foreign('kategori_id')
-                  ->references('id')
-                  ->on('kategori')
-                  ->onDelete('cascade');
         });
     }
 

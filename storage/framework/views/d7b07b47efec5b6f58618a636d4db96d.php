@@ -22,6 +22,14 @@
     </div>
 </div>
 
+<div class="col-md-3">
+    <a href="<?php echo e(route('buku.stok_menipis')); ?>" class="text-decoration-none text-white">
+        <div class="card bg-danger p-3">
+            Buku Stok Menipis: <h2><?php echo e($buku_stok_menipis); ?></h2>
+        </div>
+    </a>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -37,6 +45,9 @@ new Chart(document.getElementById('chartPeminjaman'), {
         }]
     }
 });
+
+
+
 
 // Grafik Buku Paling Banyak Dipinjam
 new Chart(document.getElementById('chartBuku'), {
