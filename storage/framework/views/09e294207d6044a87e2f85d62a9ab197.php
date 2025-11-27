@@ -33,28 +33,26 @@
             <th>Tahun</th>
             <th>Aksi</th>
         </tr>
-        <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <tr>
-            <td><?php echo e($data->firstItem() + $i); ?></td>
-            <td><?php echo e($row->judul); ?></td>
-            <td><?php echo e($row->kategori->nama_kategori); ?></td>
-            <td>
-                <?php $__currentLoopData = $row->pengarang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <span class="badge bg-success"><?php echo e($p->nama_pengarang); ?></span><br>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </td>
-            <td><?php echo e($row->stok); ?></td>
-            <td><?php echo e($row->tahun); ?></td>
-            <td><?php echo QrCode::size(150)->generate($buku->kode_qr); ?></td>
-            <td>
-                <a href="<?php echo e(route('buku.edit', $row->id)); ?>" class="btn btn-sm btn-warning">Edit</a>
-                <form action="<?php echo e(route('buku.destroy', $row->id)); ?>" class="d-inline" method="POST" onsubmit="return confirm('Yakin hapus?')">
-                    <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                    <button class="btn btn-sm btn-danger">Hapus</button>
-                </form>
-            </td>
-        </tr>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <tr>
+                    <td><?php echo e($data->firstItem() + $key); ?></td>
+                    <td><?php echo e($buku->judul); ?></td>
+                    <td><?php echo e($buku->kategori->nama); ?></td>
+                    <td>
+                        <?php $__currentLoopData = $buku->pengarang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pengarang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php echo e($pengarang->nama); ?><?php if(!$loop->last): ?>, <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </td>
+                    <td>
+                        <form action="<?php echo e(route('buku.destroy', $buku->id)); ?>" method="POST" class="d-inline">
+                            <a href="<?php echo e(route('buku.edit', $buku->id)); ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('DELETE'); ?>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </table>
 
     <?php echo e($data->appends(['search' => request('search')])->links()); ?>

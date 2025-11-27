@@ -33,28 +33,26 @@
             <th>Tahun</th>
             <th>Aksi</th>
         </tr>
-        @foreach ($data as $i => $row)
-        <tr>
-            <td>{{ $data->firstItem() + $i }}</td>
-            <td>{{ $row->judul }}</td>
-            <td>{{ $row->kategori->nama_kategori }}</td>
-            <td>
-                @foreach($row->pengarang as $p)
-                    <span class="badge bg-success">{{ $p->nama_pengarang }}</span><br>
-                @endforeach
-            </td>
-            <td>{{ $row->stok }}</td>
-            <td>{{ $row->tahun }}</td>
-            <td>{!! QrCode::size(150)->generate($buku->kode_qr) !!}</td>
-            <td>
-                <a href="{{ route('buku.edit', $row->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                <form action="{{ route('buku.destroy', $row->id) }}" class="d-inline" method="POST" onsubmit="return confirm('Yakin hapus?')">
-                    @csrf @method('DELETE')
-                    <button class="btn btn-sm btn-danger">Hapus</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
+            @foreach($data as $key => $buku)
+                <tr>
+                    <td>{{ $data->firstItem() + $key }}</td>
+                    <td>{{ $buku->judul }}</td>
+                    <td>{{ $buku->kategori->nama }}</td>
+                    <td>
+                        @foreach($buku->pengarang as $pengarang)
+                            {{ $pengarang->nama }}@if(!$loop->last), @endif
+                        @endforeach
+                    </td>
+                    <td>
+                        <form action="{{ route('buku.destroy', $buku->id) }}" method="POST" class="d-inline">
+                            <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
     </table>
 
     {{ $data->appends(['search' => request('search')])->links() }}
