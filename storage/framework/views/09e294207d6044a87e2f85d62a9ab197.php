@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <script src="https://unpkg.com/html5-qrcode"></script>
 <div class="container">
@@ -37,12 +35,17 @@
                 <tr>
                     <td><?php echo e($data->firstItem() + $key); ?></td>
                     <td><?php echo e($buku->judul); ?></td>
-                    <td><?php echo e($buku->kategori->nama); ?></td>
+                    <td><?php echo e($buku->kategori->nama_kategori ?? 'N/A'); ?></td>
                     <td>
-                        <?php $__currentLoopData = $buku->pengarang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pengarang): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php echo e($pengarang->nama); ?><?php if(!$loop->last): ?>, <?php endif; ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($buku->pengarang): ?>
+                            <?php echo e($buku->pengarang->nama_pengarang ?? 'N/A'); ?>
+
+                        <?php else: ?>
+                            N/A
+                        <?php endif; ?>
                     </td>
+                    <td><?php echo e($buku->stok); ?></td>
+                    <td><?php echo e($buku->tahun); ?></td>
                     <td>
                         <form action="<?php echo e(route('buku.destroy', $buku->id)); ?>" method="POST" class="d-inline">
                             <a href="<?php echo e(route('buku.edit', $buku->id)); ?>" class="btn btn-warning btn-sm">Edit</a>
@@ -52,7 +55,7 @@
                         </form>
                     </td>
                 </tr>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>      
     </table>
 
     <?php echo e($data->appends(['search' => request('search')])->links()); ?>

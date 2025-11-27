@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <h3>Edit Buku</h3>
@@ -26,9 +24,9 @@
 
         <div class="mb-3">
             <label>Pengarang</label>
-            <select name="pengarang_id[]" multiple class="form-control" required>
+            <select name="pengarang_id" class="form-control" required>
                 <?php $__currentLoopData = $pengarang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($p->id); ?>" <?php echo e($buku->pengarang->contains($p->id) ? 'selected' : ''); ?>>
+                    <option value="<?php echo e($p->id); ?>" <?php echo e($buku->pengarang_id == $p->id ? 'selected' : ''); ?>>
                         <?php echo e($p->nama_pengarang); ?>
 
                     </option>
@@ -51,5 +49,4 @@
     </form>
 </div>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.dashboard', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\xamp new 2\php\project-perpustakaan\project-perpustakaan\resources\views/buku/edit.blade.php ENDPATH**/ ?>

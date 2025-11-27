@@ -25,9 +25,9 @@
 
         <div class="mb-3">
             <label>Pengarang</label>
-            <select name="pengarang_id[]" multiple class="form-control" required>
+            <select name="pengarang_id" class="form-control" required>
                 @foreach($pengarang as $p)
-                    <option value="{{ $p->id }}" {{ $buku->pengarang->contains($p->id) ? 'selected' : '' }}>
+                    <option value="{{ $p->id }}" {{ $buku->pengarang_id == $p->id ? 'selected' : '' }}>
                         {{ $p->nama_pengarang }}
                     </option>
                 @endforeach

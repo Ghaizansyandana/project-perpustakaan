@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <div class="row mb-4">
@@ -23,46 +21,44 @@
     <?php endif; ?>
 
     <table class="table table-bordered">
-        <tr>
-            <th>No</th>
-            <th>Kode</th>
-            <th>Nama Peminjam</th>
-            <th>Tanggal Pinjam</th>
-            <th>Tanggal Kembali</th>
-            <th>Status</th>
-            <th>Denda</th>
-            <th>Aksi</th>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode</th>
+                <th>Nama Peminjam</th>
+                <th>Tanggal Pinjam</th>
+                <th>Tanggal Kembali</th>
+                <th>Status</th>
+                <th>Denda</th>
+                <th>Aksi</th>
 
-        </tr>
-        <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <tr>
-            <td><?php echo e($data->firstItem() + $i); ?></td>
-            <td><?php echo e($row->kode_pinjam); ?></td>
-            <td><?php echo e($row->nama_peminjam); ?></td>
-            <td><?php echo e($row->tanggal_pinjam); ?></td>
-            <td><?php echo e($row->tanggal_kembali); ?></td>
-            <?php if($row->status == 'Pinjam'): ?>
-                <span class="badge bg-danger">Belum Kembali</span>
-            <?php else: ?>
-                <span class="badge bg-success">Dikembalikan</span>
-            <?php endif; ?>
-        </td>
-        <td>Rp <?php echo e(number_format($row->total_denda)); ?></td>
-        <td>
-            <a href="<?php echo e(route('peminjaman.show', $row->id)); ?>" class="btn btn-sm btn-info">Detail</a>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <tr>
+                <td><?php echo e($data->firstItem() + $i); ?></td>
+                <td><?php echo e($row->kode_pinjam); ?></td>
+                <td><?php echo e($row->nama_peminjam); ?></td>
+                <td><?php echo e($row->tanggal_pinjam); ?></td>
+                <td><?php echo e($row->tanggal_kembali); ?></td>
+                <?php if($row->status == 'Pinjam'): ?>
+                    <td><span class="badge bg-danger">Belum Kembali</span></td>
+                <?php else: ?>
+                    <td><span class="badge bg-success">Dikembalikan</span></td>
+                <?php endif; ?>
+                <td>Rp <?php echo e(number_format($row->total_denda)); ?></td>
+                <td>
+                    <a href="<?php echo e(route('peminjaman.show', $row->id)); ?>" class="btn btn-sm btn-info">Detail</a>
 
-            <?php if($row->status == 'Pinjam'): ?>
-                <a href="<?php echo e(route('peminjaman.kembali', $row->id)); ?>" class="btn btn-sm btn-success"
-                onclick="return confirm('Konfirmasi pengembalian buku?')">Kembalikan</a>
-            <?php endif; ?>
-        </td>
-        <td>
-            <a href="<?php echo e(route('peminjaman.exportPdf')); ?>" class="btn btn-danger mb-3" target="_blank">
-                Export PDF
-            </a>
-        </td>
-        </tr>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php if($row->status == 'Pinjam'): ?>
+                        <a href="<?php echo e(route('peminjaman.kembali', $row->id)); ?>" class="btn btn-sm btn-success"
+                        onclick="return confirm('Konfirmasi pengembalian buku?')">Kembalikan</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </tbody>
     </table>
 
     <?php echo e($data->appends(['search' => request('search')])->links()); ?>

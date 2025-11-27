@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <h3>Detail Transaksi</h3>

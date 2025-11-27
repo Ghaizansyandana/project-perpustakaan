@@ -33,7 +33,7 @@ class BukuController extends Controller
         return view('buku.create', compact('kategori', 'pengarang'));
     }
 
-    public function store(Request $request, Buku $buku)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -41,18 +41,15 @@ class BukuController extends Controller
             'pengarang_id' => 'required|exists:pengarang,id',
             'stok' => 'required|integer|min:0',
             'tahun' => 'required|integer|min:1900|max:' . (date('Y') + 1),
-            
         ]);
 
-        // Create the book
+        // Create the book with all validated data
         $buku = Buku::create($validated);
 
-        // Attach the author
-        $buku->pengarang()->attach($request->pengarang_id);
+        // If you need to attach multiple authors (many-to-many), uncomment this:
+        // $buku->pengarang()->attach($request->pengarang_id);
 
-        $buku->update($request->all());
-
-        // Jika stok <= 1
+        // Check if stock is low
         if ($buku->stok <= 1) {
             Mail::to('admin@gmail.com')->send(new StokMenipisMail($buku));
         }
@@ -65,7 +62,7 @@ class BukuController extends Controller
 
     public function edit($id)
     {
-        $buku = Buku::findOrFail($id);
+        $buku = Buku::with('kategori', 'pengarang')->findOrFail($id);
         $kategori = KategoriBuku::all();
         $pengarang = Pengarang::all();
         return view('buku.edit', compact('buku', 'kategori', 'pengarang'));
@@ -74,21 +71,15 @@ class BukuController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'judul' => 'required',
-            'stok' => 'required|integer|min:1',
-            'tahun' => 'required|integer',
-            'kategori_id' => 'required',
-            'pengarang_id' => 'required|array'
+            'judul' => 'required|string|max:255',
+            'kategori_id' => 'required|exists:kategori,id',
+            'pengarang_id' => 'required|exists:pengarang,id',
+            'stok' => 'required|integer|min:0',
+            'tahun' => 'required|integer|min:1900|max:' . (date('Y') + 1),
         ]);
 
         $buku = Buku::findOrFail($id);
-        $buku->update($request->only(['judul', 'stok', 'tahun', 'kategori_id']));
-        $buku->pengarang()->sync($request->pengarang_id);
-
-        // Jika stok <= 1
-        if ($buku->stok <= 1) {
-            Mail::to('admin@gmail.com')->send(new StokMenipisMail($buku));
-        }
+        $buku->update($request->only(['judul', 'stok', 'tahun', 'kategori_id', 'pengarang_id']));
 
         LogActivity::add("Edit Buku", "Mengedit buku: " . $buku->judul);
 

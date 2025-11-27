@@ -37,12 +37,16 @@
                 <tr>
                     <td>{{ $data->firstItem() + $key }}</td>
                     <td>{{ $buku->judul }}</td>
-                    <td>{{ $buku->kategori->nama }}</td>
+                    <td>{{ $buku->kategori->nama_kategori ?? 'N/A' }}</td>
                     <td>
-                        @foreach($buku->pengarang as $pengarang)
-                            {{ $pengarang->nama }}@if(!$loop->last), @endif
-                        @endforeach
+                        @if($buku->pengarang)
+                            {{ $buku->pengarang->nama_pengarang ?? 'N/A' }}
+                        @else
+                            N/A
+                        @endif
                     </td>
+                    <td>{{ $buku->stok }}</td>
+                    <td>{{ $buku->tahun }}</td>
                     <td>
                         <form action="{{ route('buku.destroy', $buku->id) }}" method="POST" class="d-inline">
                             <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -52,7 +56,7 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
+            @endforeach      
     </table>
 
     {{ $data->appends(['search' => request('search')])->links() }}

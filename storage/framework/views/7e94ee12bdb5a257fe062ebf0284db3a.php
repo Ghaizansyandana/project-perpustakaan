@@ -1,6 +1,3 @@
-
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <h3>Transaksi Peminjaman</h3>

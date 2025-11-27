@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="container">
     <h3 class="mb-4 text-danger">Daftar Buku Stok Menipis</h3>
